@@ -1,4 +1,4 @@
-﻿using System.Runtime;
+﻿/*using System.Runtime;
 
 namespace CarReview.Models
 {
@@ -11,4 +11,4 @@ namespace CarReview.Models
         public Profil Profile {  get; set; }
         public ICollection<Review> Reviews { get; set;}
     }
-}
+}*/

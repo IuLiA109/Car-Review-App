@@ -34,6 +34,12 @@ namespace CarReview.Repository
             return Save();
         }
 
+        public bool DeleteCar(Car car)
+        {
+            _context.Remove(car);
+            return Save();
+        }
+
         public Car GetCar(int id)
         {
             return _context.Cars.Where(c => c.Id == id).FirstOrDefault();
@@ -56,6 +62,12 @@ namespace CarReview.Repository
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateCar(Car car)
+        {
+            _context.Update(car);
+            return Save();
         }
     }
 }

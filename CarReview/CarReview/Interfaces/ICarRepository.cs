@@ -10,6 +10,8 @@ namespace CarReview.Interfaces
         bool CarExists (int id);
         bool CreateCar(int categoryId, Car car);
         bool Save();
+        bool DeleteCar(Car car);
+        bool UpdateCar(Car car);
 
     }
 }

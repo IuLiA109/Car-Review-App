@@ -65,3 +65,10 @@ C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\runtimes\
 C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Scrutor.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\Iulia\Desktop\ProiectDAW\CarReview\CarReview\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll

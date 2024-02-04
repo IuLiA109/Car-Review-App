@@ -3,6 +3,7 @@ using CarReview.Dto;
 using CarReview.Interfaces;
 using CarReview.Models;
 using CarReview.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarReview.Controllers
@@ -11,12 +12,14 @@ namespace CarReview.Controllers
     [ApiController]
     public class CarController : Controller
     {
-        public readonly ICarRepository _carRepository;
-        public readonly IMapper _mapper;
-        public CarController(ICarRepository carRepository, IMapper mapper)
+        private readonly ICarRepository _carRepository;
+        private readonly IReviewRepository _reviewRepository;
+        private readonly IMapper _mapper;
+        public CarController(ICarRepository carRepository, IMapper mapper, IReviewRepository reviewRepository)
         {
             _carRepository = carRepository;
             _mapper = mapper;
+            _reviewRepository = reviewRepository;
         }
 
         [HttpGet]
@@ -63,7 +66,7 @@ namespace CarReview.Controllers
             return Ok(rating);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateCar([FromQuery] int categoryId, [FromBody] CarDto carCreate)
@@ -93,6 +96,60 @@ namespace CarReview.Controllers
             }
 
             return Ok("Successfully created");
+        }
+
+        [HttpPut("{carId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCar(int carId, [FromBody] CarDto updatedCar)
+        {
+            if(updatedCar == null)
+                return BadRequest(ModelState);
+            if(carId != updatedCar.Id)
+                return BadRequest(ModelState);
+            if(!_carRepository.CarExists(carId))
+                return NotFound();
+            if(!ModelState.IsValid) 
+                return BadRequest(ModelState);
+
+            var carMap = _mapper.Map<Car>(updatedCar);
+            if (!_carRepository.UpdateCar(carMap))
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+                return StatusCode(500, ModelState);
+
+            }
+
+            return Ok("Successfully updated");
+        }
+
+        [HttpDelete("{carId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCar(int carId)
+        {
+            if (!_carRepository.CarExists(carId))
+                return NotFound();
+
+            var reviews = _reviewRepository.GetReviewsOfCar(carId).ToList();
+            var car = _carRepository.GetCar(carId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.DeleteReviews(reviews))
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+            }
+
+            if (!_carRepository.DeleteCar(car))
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+            }
+
+            return Ok("Successfully deleted");
         }
 
     }
