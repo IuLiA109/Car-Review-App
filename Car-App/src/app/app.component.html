@@ -1,0 +1,28 @@
+<main class="main">
+  <div class="content">
+    Car Data:
+    <table>
+      <tr *ngFor="let car of cars">
+        <td>{{ car.id }}</td>
+        <td>{{ car.brand }}</td>
+        <td>{{ car.model }}</td>
+        <td>{{ car.year }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let review of car.reviews">
+              <div>
+                <span><strong>{{ review.title }}</strong></span>
+                <br>
+                <span>{{ review.text }}</span>
+                <span> Rating: {{ review.rating }}</span>
+              </div>
+            </li>
+          </ul>
+        </td>
+        <td>
+          <button (click)="fetchReviews(car.id)">See Reviews</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>
