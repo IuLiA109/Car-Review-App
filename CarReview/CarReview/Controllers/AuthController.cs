@@ -2,6 +2,7 @@
 using CarReview.Interfaces;
 using CarReview.Models;
 using CarReview.Services;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -100,7 +101,36 @@ namespace CarReview.Controllers
             }
 
             string token = CreateToken(userr);
+
+            var refreshToken = GenerateRefreshToken();
+            SetRefreshToken(refreshToken,userr);
+
             return Ok(token);
+        }
+
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            { 
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now
+            };
+            return refreshToken;
+        }
+
+        private void SetRefreshToken(RefreshToken newRefreshToken, User user) 
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            };
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+
+            user.RefreshToken = newRefreshToken.Token;
+            user.TokenCreated = newRefreshToken.Created;
+            user.TokenExpires = newRefreshToken.Expires;
         }
 
         private string CreateToken(User user)
