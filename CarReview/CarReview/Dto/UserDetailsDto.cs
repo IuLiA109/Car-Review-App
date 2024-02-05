@@ -1,11 +1,8 @@
-﻿using CarReview.Base;
-
-namespace CarReview.Models
+﻿namespace CarReview.Dto
 {
-    public class UserDetails : BaseEntity
+    public class UserDetailsDto
     {
         public int UserId { get; set; }
-        public User User { get; set; }
         public string Language { get; set; }
         public bool ReceiveNotifications { get; set; } = true;
     }

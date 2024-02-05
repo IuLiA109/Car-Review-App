@@ -3,6 +3,7 @@ using CarReview.Dto;
 using CarReview.Interfaces;
 using CarReview.Models;
 using CarReview.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarReview.Controllers
@@ -61,7 +62,7 @@ namespace CarReview.Controllers
             return Ok(cars);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
@@ -91,7 +92,7 @@ namespace CarReview.Controllers
             return Ok("Successfully created");
         }
 
-        [HttpPut("{categoryId}")]
+        [HttpPut("{categoryId}"), Authorize(Roles = "Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -120,7 +121,7 @@ namespace CarReview.Controllers
             return Ok("Successfully updated");
         }
 
-        [HttpDelete("{categoryId}")]
+        [HttpDelete("{categoryId}"), Authorize(Roles = "Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

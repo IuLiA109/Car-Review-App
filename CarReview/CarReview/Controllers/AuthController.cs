@@ -1,6 +1,7 @@
 ﻿using CarReview.Dto;
 using CarReview.Interfaces;
 using CarReview.Models;
+using CarReview.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,15 +17,17 @@ namespace CarReview.Controllers
         //public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly IUserBigRepository _userRepository;
+        private readonly IUserDetailsService _userDetailsService;
 
-        public AuthController(IConfiguration configuration, IUserBigRepository userRepository)
+        public AuthController(IConfiguration configuration, IUserBigRepository userRepository, IUserDetailsService userDetailsService)
         {
             _configuration = configuration;
             _userRepository = userRepository;
+            _userDetailsService = userDetailsService;
         }
 
-        [HttpPost("{role}/register")]
-        public async Task<ActionResult<User>> Register(UserDto request, string role)
+        [HttpPost("{role}/register/{language}")]
+        public async Task<ActionResult<User>> Register(UserDto request, string role, string language)
         {
             var userr = _userRepository.GetUsers().Where(u => u.UserName.Trim() == request.UserName.Trim()).FirstOrDefault();
 
@@ -61,6 +64,19 @@ namespace CarReview.Controllers
             }
 
             if (!_userRepository.CreateUser(user))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            var userDetails = new UserDetails()
+            {
+                User = user,
+                UserId = user.Id,
+                Language = language,
+            };
+
+            if (!_userDetailsService.CreateUserDetails(userDetails))
             {
                 ModelState.AddModelError("", "Something went wrong while savin");
                 return StatusCode(500, ModelState);

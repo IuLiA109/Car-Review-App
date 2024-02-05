@@ -1,4 +1,4 @@
-﻿namespace CarReview.Dto
+﻿/*namespace CarReview.Dto
 {
     public class UserReqDto
     {
@@ -11,4 +11,4 @@
         public string Password { get; set; } = string.Empty;
 
     }
-}
+}*/

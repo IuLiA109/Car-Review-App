@@ -14,6 +14,8 @@ namespace CarReview.Interfaces
         bool UserExistsByUsername(string username);
         bool UpdateUser(User user);
         bool DeleteUser(User user);
+        //Task UpdateUser(User user);
+        //Task DeleteUser(User user);
 
 
     }

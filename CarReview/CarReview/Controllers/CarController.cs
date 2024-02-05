@@ -98,7 +98,7 @@ namespace CarReview.Controllers
             return Ok("Successfully created");
         }
 
-        [HttpPut("{carId}")]
+        [HttpPut("{carId}"), Authorize(Roles = "Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -116,7 +116,7 @@ namespace CarReview.Controllers
             var carMap = _mapper.Map<Car>(updatedCar);
             if (!_carRepository.UpdateCar(carMap))
             {
-                ModelState.AddModelError("", "Something went wrong updating owner");
+                ModelState.AddModelError("", "Something went wrong");
                 return StatusCode(500, ModelState);
 
             }
@@ -124,7 +124,7 @@ namespace CarReview.Controllers
             return Ok("Successfully updated");
         }
 
-        [HttpDelete("{carId}")]
+        [HttpDelete("{carId}"), Authorize(Roles = "Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -141,12 +141,12 @@ namespace CarReview.Controllers
 
             if (!_reviewRepository.DeleteReviews(reviews))
             {
-                ModelState.AddModelError("", "Something went wrong updating owner");
+                ModelState.AddModelError("", "Something went wrong");
             }
 
             if (!_carRepository.DeleteCar(car))
             {
-                ModelState.AddModelError("", "Something went wrong updating owner");
+                ModelState.AddModelError("", "Something went wrong");
             }
 
             return Ok("Successfully deleted");

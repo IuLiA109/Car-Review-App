@@ -1,4 +1,4 @@
-﻿using CarReview.Models;
+﻿/*using CarReview.Models;
 
 
 namespace CarReview.Dto
@@ -22,4 +22,4 @@ namespace CarReview.Dto
             Token = token;
         }
     }
-}
+}*/

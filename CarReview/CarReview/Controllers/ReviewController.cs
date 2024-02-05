@@ -3,6 +3,7 @@ using CarReview.Dto;
 using CarReview.Interfaces;
 using CarReview.Models;
 using CarReview.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarReview.Controllers
@@ -77,7 +78,7 @@ namespace CarReview.Controllers
             return Ok(reviews);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin,User")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateReview([FromQuery] int userId, [FromQuery] int carId, [FromBody] ReviewDto reviewCreate)
@@ -98,7 +99,7 @@ namespace CarReview.Controllers
             return Ok("Successfully created");
         }
 
-        [HttpPut("{reviewId}")]
+        [HttpPut("{reviewId}"), Authorize(Roles = "Admin,User")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -116,7 +117,11 @@ namespace CarReview.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var reviewMap = _mapper.Map<Review>(updatedReview);
+            var reviewMap = _reviewRepository.GetReview(reviewId);
+            reviewMap.Title = updatedReview.Title;
+            reviewMap.Text = updatedReview.Text;
+            reviewMap.Rating = updatedReview.Rating;
+            //var reviewMap = _mapper.Map<Review>(updatedReview);
 
             if (!_reviewRepository.UpdateReview(reviewMap))
             {
@@ -127,7 +132,7 @@ namespace CarReview.Controllers
             return Ok("Successfully updated");
         }
 
-        [HttpDelete("{reviewId}")]
+        [HttpDelete("{reviewId}"), Authorize(Roles = "Admin,User")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -145,13 +150,13 @@ namespace CarReview.Controllers
 
             if (!_reviewRepository.DeleteReview(review))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Something went wrong while deleting");
             }
 
             return Ok("Successfully deleted");
         }
 
-        [HttpDelete("/DeleteReviewsByReviewer/{reviewerId}")]
+        [HttpDelete("/DeleteReviewsByUser/{userId}"), Authorize(Roles = "Admin,User")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
